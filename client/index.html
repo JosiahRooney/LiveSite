@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html  lang="en" ng-app="sitesApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Meta Reader</title>
+    <base href="/">
+    <script src="angular/angular.js"></script>
+    <script src="angular-route/angular-route.js"></script>
+    <script src="assets/app.js" charset="utf-8"></script>
+    <script src="assets/factories/siteFactory.js"></script>
+    <script src="assets/controllers/sitesController.js"></script>
+    <script src="assets/controllers/newController.js"></script>
+    <script src="assets/controllers/editController.js"></script>
+
+    <script type='text/javascript'></script>
+</head>
+<body ng-init="">
+
+	<div class="main">
+
+		<h1>LiveSite</h1>
+
+		<ul>
+			<li><a href="/">View Sites</a></li>
+			<li><a href="/site/new">Add Site</a></li>
+		</ul>
+		
+		<div ng-view></div>
+
+	</div>
+
+</body>
+</html>

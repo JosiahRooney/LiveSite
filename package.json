@@ -1,0 +1,26 @@
+{
+  "name": "meta-reader",
+  "version": "0.1.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Josiah Rooney",
+  "license": "ISC",
+  "devDependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "http": "0.0.0",
+    "request": "^2.81.0"
+  },
+  "dependencies": {
+    "angular": "^1.6.4",
+    "mongodb": "^2.2.26",
+    "mongoose": "^4.9.6",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "http": "0.0.0",
+    "request": "^2.81.0"
+  }
+}
