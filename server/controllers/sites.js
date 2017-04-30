@@ -5,11 +5,11 @@ console.log('Sites controller');
 
 function SitesController () {
 
-	//	app.get('/', sites.index);
+	//	app.get('/sites', sites.index);
 	this.index = function(req, res) {
-		console.log('GET / sites', sites);
 		Site.find({}, function(err, sites) {
 			if (!err) {
+				console.log('GET /')
 				res.json(sites);
 			} else {
 				console.log('GET / error', err);
@@ -40,10 +40,12 @@ function SitesController () {
 		var site = new Site();
 		site.name = req.body.name;
 		site.link = req.body.link;
+		site.health = "New";
+		site.lastModified = new Date();
 
 		site.save(function(err) {
 			if (!err) {
-				console.log('New site in DB. Name:',site.name,'Link:',site.link);
+				console.log('New site in DB. Name:',site.name,'Link:',site.link,'Health:',site.health);
 				res.json({
 					status: true
 				});

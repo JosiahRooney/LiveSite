@@ -8,10 +8,10 @@ app.factory("siteFactory", ['$http', function($http) {
 
         // app.get('/', sites.index);
         this.index = function(callback) {
-            $http.get('/').then(function(data) {
+            $http.get('/sites').then(function(data) {
                 sites = data.data;
                 callback(sites);
-            })
+            });
         }
 
         // app.post('/site/new', sites.create);
