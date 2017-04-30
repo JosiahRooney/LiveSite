@@ -23,14 +23,14 @@ app.factory("siteFactory", ['$http', function($http) {
 
         // app.get('/site/show/:id', sites.show);
         this.showSite = function(id, callback) {
-            $http.get('/site/show'+id).then(function(data) {
+            $http.get('/site/show/'+id).then(function(data) {
                 callback(data.data);
             });
         }
 
         // app.post('/site/:id/update', sites.update);
-        this.updateSite = function(updateSite, callback){
-            $http.post('/site/'+id+'/update/', updateSite).then(function (returned_data) {
+        this.updateSite = function(site, callback){
+            $http.post('/site/'+site._id+'/update/', site).then(function (returned_data) {
                 sites = returned_data.data;
                 callback(returned_data.data);
             });

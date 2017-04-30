@@ -1,0 +1,17 @@
+<form name="siteForm">
+
+	<p><input name="name" id="name" type="text" placeholder="Website Name" ng-model="site.name" minlength="3" value="{{site.name}}" required></p>
+
+	<p><input name="url" id="url" type="text" placeholder="Website Address" ng-model="site.link" value="{{site.link}}" required></p>
+
+	<p><button class="btn" type="submit" ng-click="updateSite()">Save</button></p>
+
+	<!-- <div ng-messages="siteForm.name.$error">
+		<p ng-message="minlength">The site name is too short.</p>
+		<p ng-message="required">The site name is required.</p>
+	</div>
+	<div ng-messages="siteForm.link.$error">
+		<p ng-message="required">The site link is required.</p>
+	</div> -->
+
+</form>

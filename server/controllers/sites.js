@@ -50,7 +50,7 @@ function SitesController () {
 					status: true
 				});
 			} else {
-				console.log('Error saving site in DB.', err);
+				console.log('Error saving site in DB', err);
 				res.json({
 					status: false,
 					message: 'Error saving site in DB'
@@ -61,10 +61,13 @@ function SitesController () {
 
 	//	app.post('/site/:id/update', sites.update);
 	this.update = function (req, res) {
-		console.log('Attempting to update site', req.body.site[0]);
-		Site.update({'_id': req.body.site[0]._id}, {
-			'name': req.body.site[0].name,
-			'link': req.body.site[0].link
+		console.log(req.body);
+		console.log('Attempting to update site', req.body);
+		Site.update({_id: req.body._id}, {
+			name: req.body.name,
+			link: req.body.link,
+			health: req.body.health,
+			lastModified: new Date()
 		}, function(err) {
 			if (!err) {
 				res.json({

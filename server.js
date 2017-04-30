@@ -15,6 +15,22 @@ require('./server/config/mongoose.js');
 var routes = require('./server/config/routes.js');
     routes(app);
 
+// sitecheck
+function siteCheck (url, callback) {
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
 app.listen( port, function() {
   console.log( `server running on port ${ port }` );
 });
