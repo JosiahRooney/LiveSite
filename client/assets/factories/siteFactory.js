@@ -5,7 +5,6 @@ app.factory("siteFactory", ['$http', function($http) {
     function SitesFactory() {
         var _this = this;
 
-
         // app.get('/', sites.index);
         this.index = function(callback) {
             $http.get('/sites').then(function(data) {
@@ -37,11 +36,10 @@ app.factory("siteFactory", ['$http', function($http) {
         };
 
         // app.get('/site/delete/:id', sites.delete);
-        this.deleteSite = function(data) {
-            var index = sites.indexOf(data);
-            if (index) {
-                sites.splice(index, 1);
-            }
+        this.deleteSite = function(id, callback) {
+            $http.post('/site/delete/'+id).then(function(returned_data) {
+                callback(returned_data);
+            });
         }
 
         this.getSites = function(callback){

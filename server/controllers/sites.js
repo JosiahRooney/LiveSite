@@ -85,6 +85,7 @@ function SitesController () {
 
 	//	app.get('/site/delete/:id', sites.delete);
 	this.delete = function (req, res) {
+		console.log('Attempting to delete site', req.params.id);
 		Site.remove({'_id': req.params.id}, function (err) {
 			if (!err) {
 				res.json({

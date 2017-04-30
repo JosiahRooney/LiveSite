@@ -17,6 +17,11 @@ app.config(function ($routeProvider, $locationProvider) {
         templateUrl: 'partials/edit_site.html',
         controller: 'editController'
     })
+    // app.get('/site/delete/:id', sites.delete);
+    .when('/site/delete/:id', {
+        templateUrl: 'partials/delete_site.html',
+        controller: 'editController'
+    })
     .otherwise({
         redirectTo: '/'
     });
