@@ -8,7 +8,6 @@ app.controller('newController', ['$scope','siteFactory', '$routeParams', '$locat
     index();
     $scope.addSite = function () {
         siteFactory.addSite($scope.newSite, function (data) {
-            console.log('Adding site - newController');
             $scope.sites = data;
         });
         $scope.newSite = {};

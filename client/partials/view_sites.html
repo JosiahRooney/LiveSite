@@ -2,10 +2,12 @@
 
 Search Sites: <input type="text" ng-model="filter_name" placeholder="Search">
 
-
 <table>
 	<tr>
 		<th>Name</th><th>Link</th><th>Health</th><th>Actions</th>
+	</tr>
+	<tr>
+		<td><a href="/site/new">New Site...</a></td>
 	</tr>
 	<tr ng-repeat="site in sites | orderBy:'name' | filter: filter_name">
 		<td>{{ site.name }}</td>

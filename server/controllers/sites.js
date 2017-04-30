@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 var Site = mongoose.model('Site');
+var request = require('request');
+var schedule = require('node-schedule');
 
 console.log('Sites controller');
 
@@ -99,6 +101,122 @@ function SitesController () {
 			}
 		});
 	}
+
+	this.siteCheck = function (address, callback) {
+
+		// Error checking
+		if (!address) return false;
+		address += "/package.json";
+
+		var siteHealth = "Bad";
+
+		// We need to read the package.json
+		// do a HTTP request on the url
+		request(address, function(err, res, data) {
+
+			console.log("Address:",address);
+			
+			if (err) {
+				console.log("There was an error", err);
+				return false;
+			}
+
+			// Look at response code (response.statusCode)
+			if (res.statusCode != 200) {
+				// If not 200 (404, 500, etc), bad
+				// The site returned an error of some kind 
+				// TODO: handle each error code separately
+				siteHealth = "Bad";
+			} else {
+				// If 200, good
+				siteHealth = "Good";
+			}
+
+			// Update site health
+			callback(siteHealth);
+		});
+	}
+
+	this.updateSites = function () {
+		var sites = [];
+		Site.find({}, function(err, data) {
+			sites = data;
+			for (var i = 0; i < sites.length; i++) {
+				siteCheck(sites[i].url, function(data) {
+					console.log(sites[0], ":", data);
+				});
+			}
+		});
+	}
+
+	this.checkSite = function(req, res) {
+
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+//      THOUGHT PROCESS: 
+// 			CALL THE SITECHECK() FUNCTION HERE FROM A GET REQUEST ON THE FRONT END, PER SITE
+// 			LATER, AUTOMATE AND SCHEDULE THIS
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+
+
+
+
+
+
+		this.siteCheck()
+		Site.update({_id: req.body._id}, {
+			name: req.body.name,
+			link: req.body.link,
+			health: req.body.health,
+			lastModified: new Date()
+		}, function(err) {
+			if (!err) {
+				res.json({
+					status: true,
+					message: "Updated site"
+				});
+			} else {
+				res.json({
+					status: false,
+					message: "Error updating site"
+				})
+			}
+		});
+	}
+
+
+
 }
 
 module.exports = new SitesController();
