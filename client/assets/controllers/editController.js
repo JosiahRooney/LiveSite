@@ -14,4 +14,10 @@ app.controller('editController', ['$scope','siteFactory', '$routeParams', '$loca
             $location.url('/');
         });
     };
+    $scope.checkSite = function () {
+        console.log("Checking site");
+        siteFactory.checkSite($scope.site, function () {
+            $location.url('/');
+        });
+    };
 }]);

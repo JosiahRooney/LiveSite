@@ -42,6 +42,13 @@ app.factory("siteFactory", ['$http', function($http) {
             });
         }
 
+        // app.get('/site/check/:id', sites.checkSite);
+        this.checkSite = function(site, callback) {
+            $http.post('/site/check/'+site._id, site).then(function(returned_data) {
+                callback(returned_data);
+            });
+        }
+
         this.getSites = function(callback){
             callback(sites);
         };

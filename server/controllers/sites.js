@@ -7,6 +7,8 @@ console.log('Sites controller');
 
 function SitesController () {
 
+	var _this = this;
+
 	//	app.get('/sites', sites.index);
 	this.index = function(req, res) {
 		Site.find({}, function(err, sites) {
@@ -149,70 +151,37 @@ function SitesController () {
 		});
 	}
 
+	//	app.post('/site/check/:id', sites.checkSite);
 	this.checkSite = function(req, res) {
+		console.log('Checking site.', req.body);
 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-//      THOUGHT PROCESS: 
-// 			CALL THE SITECHECK() FUNCTION HERE FROM A GET REQUEST ON THE FRONT END, PER SITE
-// 			LATER, AUTOMATE AND SCHEDULE THIS
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
+		// 
+		//      THOUGHT PROCESS: 
+		// 			CALL THE SITECHECK() FUNCTION HERE FROM A GET REQUEST ON THE FRONT END, PER SITE.
+		// 			LATER, AUTOMATE AND SCHEDULE THIS
+		// 
 
-
-
-
-
-
-		this.siteCheck()
-		Site.update({_id: req.body._id}, {
-			name: req.body.name,
-			link: req.body.link,
-			health: req.body.health,
-			lastModified: new Date()
-		}, function(err) {
-			if (!err) {
-				res.json({
-					status: true,
-					message: "Updated site"
-				});
-			} else {
-				res.json({
-					status: false,
-					message: "Error updating site"
-				})
-			}
-		});
+		_this.siteCheck(req.body.link, function(health) {
+			console.log('Site health:',health);
+			Site.update({_id: req.params.id}, {
+				name: req.body.name,
+				link: req.body.link,
+				health: health,
+				lastModified: new Date()
+			}, function (err) {
+				if (!err) {
+					res.json({
+						status: true
+					});
+				} else {
+					res.json({
+						status: false
+					});
+				}
+			}, {
+				upsert: true
+			});
+		})
 	}
 
 

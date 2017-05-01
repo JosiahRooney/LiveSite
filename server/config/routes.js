@@ -8,4 +8,5 @@ module.exports = function(app){
     app.post('/site/new', sites.create);
     app.post('/site/:id/update', sites.update);
     app.post('/site/delete/:id', sites.delete);
+    app.post('/site/check/:id', sites.checkSite);
 };
