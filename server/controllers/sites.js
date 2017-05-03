@@ -3,7 +3,7 @@ var Site = mongoose.model('Site');
 var request = require('request');
 var schedule = require('node-schedule');
 
-console.log('Sites controller');
+console.log('[app] [controller] sites');
 
 function SitesController () {
 
@@ -13,7 +13,7 @@ function SitesController () {
 	this.index = function(req, res) {
 		Site.find({}, function(err, sites) {
 			if (!err) {
-				console.log('GET /')
+				// console.log('GET /')
 				res.json(sites);
 			} else {
 				console.log('GET / error', err);
@@ -29,6 +29,7 @@ function SitesController () {
 	this.show = function (req, res) {
 		Site.find({'_id': req.params.id}, function(err, site) {
 			if (!err) {
+				console.log('GET /site/show/'+req.params.id);
 				res.json({
 					status: true,
 					site: site
@@ -71,6 +72,7 @@ function SitesController () {
 			name: req.body.name,
 			link: req.body.link,
 			health: req.body.health,
+			package: false,
 			lastModified: new Date()
 		}, function(err) {
 			if (!err) {
@@ -108,35 +110,60 @@ function SitesController () {
 
 		// Error checking
 		if (!address) return false;
-		address += "/package.json";
+		var siteHealth = {
+			package: false,
+			health: "Bad"
+		};
 
-		var siteHealth = "Bad";
-
-		// We need to read the package.json
-		// do a HTTP request on the url
+		// First check if the site itself is returning 200
 		request(address, function(err, res, data) {
 
-			console.log("Address:",address);
-			
 			if (err) {
-				console.log("There was an error", err);
-				return false;
-			}
-
-			// Look at response code (response.statusCode)
-			if (res.statusCode != 200) {
-				// If not 200 (404, 500, etc), bad
-				// The site returned an error of some kind 
-				// TODO: handle each error code separately
-				siteHealth = "Bad";
+				
+				console.log('There was an error',err.code);
+				callback(siteHealth);
+			
 			} else {
-				// If 200, good
-				siteHealth = "Good";
+
+				if (res.statusCode == 200) {
+					// Site is good, continue to check package.json
+					
+					siteHealth.health = "Good";
+					address += "/package.json";
+
+					// We need to read the package.json
+					// do a HTTP request on the url
+					request(address, function(err, res, data) {
+
+						console.log("Address:",address);
+						
+						if (err) {
+							console.log("There was an error", err);
+						}
+
+						// Look at response code (response.statusCode)
+						if (res.statusCode != 200) {
+							// If not 200 (404, 500, etc), bad
+							// The site returned an error of some kind 
+							// TODO: handle each error code separately
+							siteHealth.health = "Fair";
+						} else {
+							// If 200, good
+							siteHealth.package = true;
+						}
+
+						// Update site health
+						callback(siteHealth);
+					});
+
+				} else {
+					callback(siteHealth);
+				}
+
 			}
 
-			// Update site health
-			callback(siteHealth);
 		});
+
 	}
 
 	this.updateSites = function () {
@@ -161,12 +188,13 @@ function SitesController () {
 		// 			LATER, AUTOMATE AND SCHEDULE THIS
 		// 
 
-		_this.siteCheck(req.body.link, function(health) {
-			console.log('Site health:',health);
+		_this.siteCheck(req.body.link, function(siteHealth) {
+			console.log('Site health:',siteHealth.health);
 			Site.update({_id: req.params.id}, {
 				name: req.body.name,
 				link: req.body.link,
-				health: health,
+				health: siteHealth.health,
+				package: siteHealth.package,
 				lastModified: new Date()
 			}, function (err) {
 				if (!err) {
@@ -183,9 +211,6 @@ function SitesController () {
 			});
 		})
 	}
-
-
-
 }
 
 module.exports = new SitesController();

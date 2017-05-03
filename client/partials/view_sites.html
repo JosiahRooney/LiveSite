@@ -1,18 +1,25 @@
 <h3>Sites</h3>
 
-Search Sites: <input type="text" ng-model="filter_name" placeholder="Search">
+<div class="container">
+	<form class="navbar-form" role="search">
+		<div class="form-group">
+			<input type="text" ng-model="filter_name" class="form-control" placeholder="Search">
+		</div>
+	</form>
+</div>
 
-<table>
+<table class="sites-table table table-striped table-bordered table-hover">
 	<tr>
-		<th>Name</th><th>Link</th><th>Health</th><th>Actions</th>
+		<th>Name</th><th>Link</th><th>Health</th><th>Package.json</th><th>Actions</th>
+	</tr>
+	<tr ng-repeat="site in sites | orderBy:'name' | filter: filter_name" class="site-row">
+		<td class="site-name"><strong>{{ site.name }}</strong></td>
+		<td class="site-link"><a href="{{ site.link }}">{{ site.link }}</a></td>
+		<td class="site-health health-{{site.health}}">{{ site.health }}</td>
+		<td class="site-package package-{{site.package}}">{{ site.package }}</td>
+		<td class="actions"><a href="/site/{{ site._id }}/edit">Edit</a> | <a href="/site/delete/{{site._id}}">Delete</a> | <a href="/site/check/{{site._id}}">Check Site</a></td>
 	</tr>
 	<tr>
-		<td><a href="/site/new">New Site...</a></td>
-	</tr>
-	<tr ng-repeat="site in sites | orderBy:'name' | filter: filter_name">
-		<td>{{ site.name }}</td>
-		<td><a href="{{ site.link }}">{{ site.link }}</a></td>
-		<td>{{ site.health }}</td>
-		<td><a href="/site/{{ site._id }}/edit">Edit</a> | <a href="/site/delete/{{site._id}}">Delete</a> | <a href="/site/check/{{site._id}}">Check Site</a></td>
+		<td colspan="5"><a href="/site/new" class="new-site">New Site...</a></td>
 	</tr>
 </table>

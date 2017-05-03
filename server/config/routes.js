@@ -1,6 +1,6 @@
 var sites = require('../controllers/sites.js');
 
-console.log("Routes loaded.");
+console.log("[app] [routes] loaded");
 
 module.exports = function(app){
     app.get('/sites', sites.index);

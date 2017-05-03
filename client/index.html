@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>LiveSite</title>
     <base href="/">
+
+    <!-- JS -->
     <script src="angular/angular.js"></script>
     <script src="angular-route/angular-route.js"></script>
     <script src="assets/app.js" charset="utf-8"></script>
@@ -11,23 +13,36 @@
     <script src="assets/controllers/sitesController.js"></script>
     <script src="assets/controllers/newController.js"></script>
     <script src="assets/controllers/editController.js"></script>
+    <script src="jquery/dist/jquery.min.js"></script>
 
-    <script type='text/javascript'></script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/app.css">
+
 </head>
-<body ng-init="">
+<body ng-init>
 
-	<div class="main">
+	<div class="container">
 
-		<h1>LiveSite</h1>
+        <div class="row">
 
-		<ul>
-			<li><a href="/">View Sites</a></li>
-			<li><a href="/site/new">Add Site</a></li>
-		</ul>
-		
-		<div ng-view></div>
+    		<h1 class="col-md-6">LiveSite</h1>
 
-	</div>
+            <ul class="nav nav-pills col-md-6">
+                <li role="presentation"><a href="/">View Sites</a></li>
+                <li role="presentation"><a href="/site/new">Add Site</a></li>
+            </ul>
+
+        </div>
+
+        <div ng-view></div>
+
+    </div>
+
+
+    <!-- <script src="bootstrap/dist/js/bootstrap.min.js"></script> -->
+    <script src="assets/js/scripts.js"></script>
 
 </body>
 </html>

@@ -1,0 +1,19 @@
+body {
+  margin: 0;
+}
+.health-New {
+  background-color: #d9edf7;
+}
+.health-Bad {
+  background-color: #f2dede;
+}
+.health-Fair {
+  background-color: #fcf8e3;
+}
+.package-false {
+  background-color: #f2dede;
+}
+.new-site {
+  display: block;
+  text-align: center;
+}

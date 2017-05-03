@@ -1,19 +1,23 @@
-<p>Add sites to watch for uptime.</p>
+<p class="lead">Add sites to watch for uptime.</p>
 
-<form name="siteForm">
+<form name="siteForm container">
 
-	<p><input name="name" id="name" type="text" placeholder="Website Name" ng-model="newSite.name" minlength="3" required></p>
+	<div class="row">
 
-	<p><input name="url" id="url" type="text" placeholder="Website Address" ng-model="newSite.link" required></p>
+		<p class="col-sm-4"><input name="name" class="form-control" id="name" type="text" placeholder="Website Name - eg. My Website" ng-model="newSite.name" minlength="3" required></p>
 
-	<p><button class="btn" type="submit" ng-click="addSite()">Add</button></p>
+		<p class="col-sm-4"><input name="url" class="form-control" id="url" type="text" placeholder="Website Address - eg. http://mywebsite.com" ng-model="newSite.link" required></p>
 
-	<!-- <div ng-messages="siteForm.name.$error">
-		<p ng-message="minlength">The site name is too short.</p>
-		<p ng-message="required">The site name is required.</p>
+		<p class="col-sm-4"><button class="btn btn-success" type="submit" ng-click="addSite()">Add</button></p>
+
+		<!-- <div ng-messages="siteForm.name.$error">
+			<p ng-message="minlength">The site name is too short.</p>
+			<p ng-message="required">The site name is required.</p>
+		</div>
+		<div ng-messages="siteForm.link.$error">
+			<p ng-message="required">The site link is required.</p>
+		</div> -->
+
 	</div>
-	<div ng-messages="siteForm.link.$error">
-		<p ng-message="required">The site link is required.</p>
-	</div> -->
 
 </form>

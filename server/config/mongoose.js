@@ -1,4 +1,4 @@
-console.log('mongo connection, mongoose setup');
+console.log('[app] [mongoose] setup');
 
 //This file is complete other than changing our DB
 var mongoose      = require('mongoose'),
@@ -10,17 +10,17 @@ var mongoose      = require('mongoose'),
 
 mongoose.connect( dbURI );
 mongoose.connection.on( 'connected', function () {
-    console.log( 'Mongoose default connection open to',dbURI);
+    console.log( '[app] [mongoose] default connection open to',dbURI);
 });
 mongoose.connection.on( 'error', function ( err ) {
-    console.error( 'Mongoose default connection error: ${ err }');
+    console.error( '[app] [mongoose] default connection error: ${ err }');
 });
 mongoose.connection.on( 'disconnected', function () {
-    console.log( 'Mongoose default connection disconnected' );
+    console.log( '[app] [mongoose] default connection disconnected' );
 });
 process.on( 'SIGINT', function() {
     mongoose.connection.close( function () {
-        console.log( 'Mongoose default connection disconnected through app termination' );
+        console.log( '[app] [mongoose] default connection disconnected through app termination' );
         process.exit( 0 );
     });
 });
