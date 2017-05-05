@@ -17,3 +17,21 @@ body {
   display: block;
   text-align: center;
 }
+.sites-list {
+  display: table;
+  padding: 0;
+}
+.sites-list li {
+  display: table-row;
+}
+.sites-list li:first-child {
+  font-weight: bold;
+}
+.sites-list li:last-child {
+  display: block;
+}
+.sites-list li > div {
+  display: table-cell;
+  padding: 4px 7px;
+  vertical-align: middle;
+}

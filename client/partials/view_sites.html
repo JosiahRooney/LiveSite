@@ -1,25 +1,25 @@
 <h3>Sites</h3>
 
-<div class="container">
-	<form class="navbar-form" role="search">
-		<div class="form-group">
-			<input type="text" ng-model="filter_name" class="form-control" placeholder="Search">
-		</div>
-	</form>
-</div>
+<form class="navbar-form row" role="search">
+	<div class="form-group col-md-6">
+		<input type="text" ng-model="filter_name" class="form-control" placeholder="Search">
+	</div>
+</form>
 
-<table class="sites-table table table-striped table-bordered table-hover">
-	<tr>
-		<th>Name</th><th>Link</th><th>Health</th><th>Package.json</th><th>Actions</th>
-	</tr>
-	<tr ng-repeat="site in sites | orderBy:'name' | filter: filter_name" class="site-row">
-		<td class="site-name"><strong>{{ site.name }}</strong></td>
-		<td class="site-link"><a href="{{ site.link }}">{{ site.link }}</a></td>
-		<td class="site-health health-{{site.health}}">{{ site.health }}</td>
-		<td class="site-package package-{{site.package}}">{{ site.package }}</td>
-		<td class="actions"><a href="/site/{{ site._id }}/edit">Edit</a> | <a href="/site/delete/{{site._id}}">Delete</a> | <a href="/site/check/{{site._id}}">Check Site</a></td>
-	</tr>
-	<tr>
-		<td colspan="5"><a href="/site/new" class="new-site">New Site...</a></td>
-	</tr>
-</table>
+<ul class="sites-list table">
+	<li class="sites-list__header">
+		<div>Name</div><div>Health</div><div>Robots.txt</div><div>Package.json</div><div>Placeholder</div><div>Placeholder</div><div>Actions</div>
+	</li>
+	<li ng-repeat="site in sites | orderBy:'name' | filter: filter_name" class="site-row">
+		<div class="site-name"><strong><a href="{{ site.link }}" target="_blank">{{ site.name }}</a></strong></div>
+		<div class="site-health health-{{site.health}}">{{ site.health }}</div>
+		<div class="site-robots package-{{site.robots}}">{{ site.robots }}</div>
+		<div class="site-package package-{{site.package}}">{{ site.package }}</div>
+		<div class="placeholder"></div>
+		<div class="placeholder"></div>
+		<div class="actions"><a href="/site/{{ site._id }}/edit">Edit</a> | <a href="/site/delete/{{site._id}}">Delete</a> | <a href="/site/check/{{site._id}}">Check Site</a></div>
+	</li>
+	<li>
+		<div class="span-all"><a href="/site/new" class="btn btn-success new-site">New Site +</a></div>
+	</li>
+</ul>

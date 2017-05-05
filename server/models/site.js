@@ -6,6 +6,7 @@ var SiteSchema = new mongoose.Schema({
 	link: String,
 	health: String,
 	package: Boolean,
+	robots: Boolean,
 	lastModified: Date
 });
 

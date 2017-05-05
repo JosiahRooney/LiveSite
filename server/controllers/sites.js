@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Site = mongoose.model('Site');
 var request = require('request');
 var schedule = require('node-schedule');
+var async = require('async');
 
 console.log('[app] [controller] sites');
 
@@ -106,95 +107,106 @@ function SitesController () {
 		});
 	}
 
+
+
+
+
+
+	function fetch (address, callback) {
+		// This function does the HTTP request
+		request(address, function(err, response, body) {
+			if ( err ) {
+				callback(err);
+			} else {
+				callback(null, response, body);
+			}
+		});
+	}
+
 	this.siteCheck = function (address, callback) {
+		// This function checks the site's 3 urls (domain.com, domain.com/package.json, domain.com/robots.txt)
+
+		console.log('SiteCheck function: ', address);
 
 		// Error checking
 		if (!address) return false;
+
 		var siteHealth = {
 			package: false,
+			robots: false,
 			health: "Bad"
 		};
 
-		// First check if the site itself is returning 200
-		request(address, function(err, res, data) {
+		var siteArr = [
+			address,
+			address + "/package.json",
+			address + "/robots.txt"
+		];
+
+		console.log('SiteCheck function: ', siteArr);
+
+		async.map(siteArr, fetch, function(err, response, body) {
+			// response[0]: domain.com
+			// response[1]: domain.com/package.json
+			// response[2]: domain.com/robots.txt
 
 			if (err) {
 				
-				console.log('There was an error',err.code);
+				console.log('There was an error',err);
 				callback(siteHealth);
-			
+
 			} else {
-
-				if (res.statusCode == 200) {
-					// Site is good, continue to check package.json
-					
-					siteHealth.health = "Good";
-					address += "/package.json";
-
-					// We need to read the package.json
-					// do a HTTP request on the url
-					request(address, function(err, res, data) {
-
-						console.log("Address:",address);
-						
-						if (err) {
-							console.log("There was an error", err);
-						}
-
-						// Look at response code (response.statusCode)
-						if (res.statusCode != 200) {
-							// If not 200 (404, 500, etc), bad
-							// The site returned an error of some kind 
-							// TODO: handle each error code separately
-							siteHealth.health = "Fair";
-						} else {
-							// If 200, good
-							siteHealth.package = true;
-						}
-
-						// Update site health
-						callback(siteHealth);
-					});
-
-				} else {
-					callback(siteHealth);
+				
+				if (response[0].statusCode === 200) {
+					// Site returns a 200
+					siteHealth.health = "Excellent";
 				}
 
+				if ( response[1].statusCode === 200 ) {
+					// Site's package.json returns a 200
+					siteHealth.package = true;
+				
+				} else {
+					// Site's package.json returns a 404/503
+					siteHealth.health = "Fair";
+				}
+
+				if ( response[2].statusCode === 200 ) {
+					// Site's robots.txt returns a 200
+					siteHealth.robots = true;
+
+				} else {
+					// Site's robots.txt returns a 404/503
+					siteHealth.health = "Fair";
+				}
+
+				callback(siteHealth);
+			
 			}
 
 		});
 
 	}
 
-	this.updateSites = function () {
-		var sites = [];
-		Site.find({}, function(err, data) {
-			sites = data;
-			for (var i = 0; i < sites.length; i++) {
-				siteCheck(sites[i].url, function(data) {
-					console.log(sites[0], ":", data);
-				});
-			}
-		});
-	}
 
 	//	app.post('/site/check/:id', sites.checkSite);
 	this.checkSite = function(req, res) {
-		console.log('Checking site.', req.body);
+		console.log('CheckSite function: ', req.body.link);
+		var link = req.body.link;
 
-		// 
-		//      THOUGHT PROCESS: 
-		// 			CALL THE SITECHECK() FUNCTION HERE FROM A GET REQUEST ON THE FRONT END, PER SITE.
-		// 			LATER, AUTOMATE AND SCHEDULE THIS
-		// 
+		// If the URL ends in /, remove it here
+		if ( link[link.length-1] == "/" ) {
+			link = link.substring(0, link.length-1);
+		}
 
-		_this.siteCheck(req.body.link, function(siteHealth) {
+		_this.siteCheck(link, function(siteHealth) {
 			console.log('Site health:',siteHealth.health);
 			Site.update({_id: req.params.id}, {
 				name: req.body.name,
 				link: req.body.link,
 				health: siteHealth.health,
 				package: siteHealth.package,
+				robots: siteHealth.robots,
 				lastModified: new Date()
 			}, function (err) {
 				if (!err) {
@@ -209,8 +221,54 @@ function SitesController () {
 			}, {
 				upsert: true
 			});
-		})
+		});
 	}
+
+	this.updateSites = function () {
+		// Get all sites
+		console.log('Running automated site checker function');
+		Site.find({}, function(err, data) {
+			// Run checkSite() on each of them
+			data.forEach((site) => {
+				_this.siteCheck(site.link, function(siteHealth) {
+					Site.update({_id: site._id}, {
+						name: site.name,
+						link: site.link,
+						health: siteHealth.health,
+						package: siteHealth.package,
+						robots: siteHealth.robots,
+						lastModified: new Date()
+					}, function (err) {
+						if (err) {
+							console.log('There was an error with', site.name)
+						} else {
+							console.log('There was no error with', site.name);
+						}
+					}, {
+						upsert: true
+					});
+				});
+
+			});
+		});
+	}
+
+	var freq = {
+		min: "53",
+		hour: "*",
+		day: "*",
+		month: "*",
+		weekday: "*"
+	}
+	var frequencyString = freq.min + " " + freq.hour + " " + freq.day + " " + freq.month + " " + freq.weekday;
+	var job = schedule.scheduleJob(frequencyString, function() {
+		console.log('This runs every hour at *:',freq.min);
+		_this.updateSites();
+	});
+
 }
+
+
+
 
 module.exports = new SitesController();
