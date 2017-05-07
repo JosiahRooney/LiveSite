@@ -1,4 +1,14 @@
 
+<a name="0.2.0"></a>
+# 0.1.1  (2017-5-1) #
+
+## Full original spec
+
+* Scheduled, batch SiteCheck works 
+
+
+
+
 <a name="0.1.1"></a>
 # 0.1.1  (2017-5-1) #
 
